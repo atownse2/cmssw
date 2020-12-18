@@ -70,7 +70,7 @@ void TrackletEngine::execute() {
   assert(outervmstubs_ != nullptr);
 
   //For debugging efficiency loss
-  ofstream TrackletEngineDebug("TrackletEngineDebug_trunc_L1TK_MTC.txt", ofstream::app);
+  //ofstream TrackletEngineDebug("TrackletEngineDebug_trunc_L1TK_MTC.txt", ofstream::app);
 
   for (unsigned int i = 0; i < innervmstubs_->nVMStubs(); i++) {
     const VMStubTE& innervmstub = innervmstubs_->getVMStubTE(i);
@@ -90,17 +90,17 @@ void TrackletEngine::execute() {
     int last = start + next;
 
     //For debugging efficiency loss
-    TrackletEngineDebug << "New Inner Stub" << endl;
-    TrackletEngineDebug << "innerStubPos = " << innervmstub.stub()->r().value() << "," << innervmstub.stub()->z().value() << "," << innervmstub.stub()->phi().value() << endl;
-    TrackletEngineDebug << "last = " << last << endl;
-    TrackletEngineDebug << "iSeed = " << iSeed_ << endl;
+    //TrackletEngineDebug << "New Inner Stub" << endl;
+    //TrackletEngineDebug << "innerStubPos = " << innervmstub.stub()->r().value() << "," << innervmstub.stub()->z().value() << "," << innervmstub.stub()->phi().value() << endl;
+    //TrackletEngineDebug << "last = " << last << endl;
+    //TrackletEngineDebug << "iSeed = " << iSeed_ << endl;
 
 
     for (int ibin = start; ibin <= last; ibin++) {
 
       //For debugging efficiency loss
-      TrackletEngineDebug << "New ibin" << endl;
-      TrackletEngineDebug << "ibin = " << ibin << endl;
+      //TrackletEngineDebug << "New ibin" << endl;
+      //TrackletEngineDebug << "ibin = " << ibin << endl;
 
 
       for (unsigned int j = 0; j < outervmstubs_->nVMStubsBinned(ibin); j++) {
@@ -153,8 +153,8 @@ void TrackletEngine::execute() {
         }
 
         //For debugging efficiency loss
-        TrackletEngineDebug << "New Outer Stub" << endl;
-        TrackletEngineDebug << "outerStubPos = " << outervmstub.stub()->r().value() << "," << outervmstub.stub()->z().value() << "," << outervmstub.stub()->phi().value() << endl;
+        //TrackletEngineDebug << "New Outer Stub" << endl;
+        //TrackletEngineDebug << "outerStubPos = " << outervmstub.stub()->r().value() << "," << outervmstub.stub()->z().value() << "," << outervmstub.stub()->phi().value() << endl;
 
 
         if (settings_.debugTracklet())
