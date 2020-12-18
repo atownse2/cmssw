@@ -4,8 +4,9 @@ __init__.py
 .#*
 #*#
 *~
-L1Trigger/TrackFindingTracklet/test/
+L1Trigger/TrackFindingTracklet/test/*.root
+L1Trigger/TrackFindingTracklet/test/TrkPlots/
+L1Trigger/TrackFindingTracklet/test/hist/L1TrackNtuplePlot_output/
+L1Trigger/TrackFindingTracklet/test/hist/overlayPlotOut/
+L1Trigger/TrackFindingTracklet/test/*.txt
 .__*
-hist/L1TrackNtuplePlot_output/
-hist/overlayPlotOut/
-
