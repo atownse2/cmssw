@@ -171,6 +171,11 @@ void TrackletEventProcessor::init(Settings const& theSettings) {
 }
 
 void TrackletEventProcessor::event(SLHCEvent& ev) {
+  
+  //For debuggins efficiency loss
+  ofstream TrackletEngineDebug("TrackletEngineDebug_trunc_L1TK_MTC.txt", ofstream::app);
+  TrackletEngineDebug << "New Event" << endl;
+
   globals_->event() = &ev;
 
   tracks_.clear();

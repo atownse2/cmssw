@@ -302,7 +302,7 @@ void MatchEngine::execute() {
       int iz=vmstub.stub()->z().value();
       int izbin= (iz>>(izbits-4))&7;
 
-      unsigned int index=barrel?(izbin<<(nbits+5))+(projrinv<<nbits)+vmstub.bend().value(): (projrinv<<nbits)+vmstub.bend().value(); 
+      unsigned int index=barrel_?(izbin<<(nbits+5))+(projrinv<<nbits)+vmstub.bend().value(): (projrinv<<nbits)+vmstub.bend().value(); 
 
       //Check if stub z position consistent
       int idrz = stubfinerz - projfinerzadj;

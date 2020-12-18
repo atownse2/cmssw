@@ -69,6 +69,9 @@ void TrackletEngine::execute() {
   assert(innervmstubs_ != nullptr);
   assert(outervmstubs_ != nullptr);
 
+  //For debugging efficiency loss
+  ofstream TrackletEngineDebug("TrackletEngineDebug_trunc_L1TK_MTC.txt", ofstream::app);
+
   for (unsigned int i = 0; i < innervmstubs_->nVMStubs(); i++) {
     const VMStubTE& innervmstub = innervmstubs_->getVMStubTE(i);
     FPGAWord lookupbits = innervmstub.vmbits();
@@ -86,7 +89,20 @@ void TrackletEngine::execute() {
     }
     int last = start + next;
 
+    //For debugging efficiency loss
+    TrackletEngineDebug << "New Inner Stub" << endl;
+    TrackletEngineDebug << "innerStubPos = " << innervmstub.stub()->r().value() << "," << innervmstub.stub()->z().value() << "," << innervmstub.stub()->phi().value() << endl;
+    TrackletEngineDebug << "last = " << last << endl;
+    TrackletEngineDebug << "iSeed = " << iSeed_ << endl;
+
+
     for (int ibin = start; ibin <= last; ibin++) {
+
+      //For debugging efficiency loss
+      TrackletEngineDebug << "New ibin" << endl;
+      TrackletEngineDebug << "ibin = " << ibin << endl;
+
+
       for (unsigned int j = 0; j < outervmstubs_->nVMStubsBinned(ibin); j++) {
         if (countall >= settings_.maxStep("TE"))
           break;
@@ -95,10 +111,10 @@ void TrackletEngine::execute() {
 
         int rzbin = outervmstub.vmbits().bits(0, 3);
 
-        FPGAWord iphiinnerbin = innervmstub.finephi();
+        FPGAWord iphiinnerbin = innervmstub.finephi(); //Should this be moved up 2 loops?
         FPGAWord iphiouterbin = outervmstub.finephi();   
 
-        FPGAWord z=innervmstub.stub()->z();
+        FPGAWord z=innervmstub.stub()->z(); //Should this be moved up 2 loops?
         int znbits=z.nbits();
         int iz=abs(z.value());
         int izbin=iz*8/(1<<(znbits-1));
@@ -135,6 +151,11 @@ void TrackletEngine::execute() {
 	 
           continue;
         }
+
+        //For debugging efficiency loss
+        TrackletEngineDebug << "New Outer Stub" << endl;
+        TrackletEngineDebug << "outerStubPos = " << outervmstub.stub()->r().value() << "," << outervmstub.stub()->z().value() << "," << outervmstub.stub()->phi().value() << endl;
+
 
         if (settings_.debugTracklet())
           edm::LogVerbatim("Tracklet") << "Adding stub pair in " << getName();
@@ -297,10 +318,11 @@ void TrackletEngine::setVMPhiBin() {
               passinner = bend - bendinnermin > -settings_.bendcutbarrelTE && 
                 bend - bendinnermax < settings_.bendcutbarrelTE;
             } else if (layerdisk1_ <= 5 && layerdisk2_ > 5){
-              passinner = (izinner!=0)?bend-bendinnermin>-settings_.bendcutbarrelTE &&
-                bendinnermax<settings_.bendcutbarrelTE:false;
+              passinner = (izinner!=0)?bend - bendinnermin > -settings_.bendcutbarrelTE &&
+                                       bend - bendinnermax <  settings_.bendcutbarrelTE:false;
             } else {
-              passinner = bend - bendinnermin>-settings_.bendcutdiskTE&&bend-bendinnermax<settings_.bendcutdiskTE;
+              passinner = bend - bendinnermin > -settings_.bendcutdiskTE&&
+                          bend - bendinnermax <  settings_.bendcutdiskTE;
             }
             //          bool passinner = bend - bendinnermin > -settings_.bendcutte(0, iSeed_) &&
             //                         bend - bendinnermax < settings_.bendcutte(0, iSeed_);
@@ -312,11 +334,14 @@ void TrackletEngine::setVMPhiBin() {
           for (int ibend = 0; ibend < (1 << nbendbitsouter); ibend++) {
             double bend = benddecode(ibend, nbendbitsouter == 3);
             if (layerdisk1_ <= 5 && layerdisk2_ <=5){
-              passouter = bend - bendoutermin > -settings_.bendcutbarrelTE&&bend - bendoutermax<settings_.bendcutbarrelTE;
+              passouter = bend - bendoutermin > -settings_.bendcutbarrelTE&&
+                          bend - bendoutermax <  settings_.bendcutbarrelTE;
             } else if (layerdisk1_ <= 5 && layerdisk2_ > 5){
-              passouter = (izinner!=0)?bend-bendoutermin>-settings_.bendcutdiskTE&&bend-bendoutermax<settings_.bendcutdiskTE:false;
+              passouter = (izinner!=0)?bend - bendoutermin > -settings_.bendcutdiskTE&&
+                                       bend-bendoutermax<settings_.bendcutdiskTE:false;
             } else{
-              passouter = bend-bendoutermin>-settings_.bendcutdiskTE&&bend-bendoutermax<settings_.bendcutdiskTE;
+              passouter = bend - bendoutermin > -settings_.bendcutdiskTE&&
+                          bend - bendoutermax <  settings_.bendcutdiskTE;
             }
             // bool passouter = bend - bendoutermin > -settings_.bendcutte(1, iSeed_) &&
             //                bend - bendoutermax < settings_.bendcutte(1, iSeed_);
